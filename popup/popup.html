@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <title>Catbar</title>
+  <link rel="stylesheet" href="popup.css">
+</head>
+<body>
+  <header class="hero">
+    <div class="hero-top">
+      <h1>Catbar</h1>
+      <label class="switch" title="有効にする">
+        <input type="checkbox" id="enabled" aria-label="有効にする">
+        <span class="track"><span class="thumb"></span></span>
+      </label>
+    </div>
+    <div class="stage" aria-hidden="true">
+      <div class="cat" id="previewCat">
+        <div class="cat-body"></div>
+        <div class="cat-lower"></div>
+        <div class="cat-upper"></div>
+      </div>
+      <div class="floor"></div>
+    </div>
+  </header>
+
+  <main id="settings">
+    <section>
+      <h2>猫の種類</h2>
+      <div class="breeds" role="radiogroup" aria-label="猫の種類">
+        <label class="breed">
+          <input type="radio" name="breed" value="white">
+          <span class="face" data-breed="white"></span>
+          <span class="breed-name">白猫</span>
+        </label>
+        <label class="breed">
+          <input type="radio" name="breed" value="black">
+          <span class="face" data-breed="black"></span>
+          <span class="breed-name">黒猫</span>
+        </label>
+        <label class="breed">
+          <input type="radio" name="breed" value="hachiware">
+          <span class="face" data-breed="hachiware"></span>
+          <span class="breed-name">八割れ</span>
+        </label>
+      </div>
+    </section>
+
+    <section>
+      <h2>大きさ</h2>
+      <div class="segmented" role="radiogroup" aria-label="大きさ">
+        <label><input type="radio" name="scale" value="1"><span>1×</span></label>
+        <label><input type="radio" name="scale" value="2"><span>2×</span></label>
+        <label><input type="radio" name="scale" value="3"><span>3×</span></label>
+      </div>
+    </section>
+
+    <section class="row">
+      <div>
+        <h2>おしゃべり</h2>
+        <p>再生中、3分ごとに吹き出しでひとこと</p>
+      </div>
+      <label class="switch">
+        <input type="checkbox" id="talk" aria-label="3分ごとにしゃべる">
+        <span class="track"><span class="thumb"></span></span>
+      </label>
+    </section>
+  </main>
+
+  <footer><span id="version"></span></footer>
+  <script src="popup.js"></script>
+</body>
+</html>

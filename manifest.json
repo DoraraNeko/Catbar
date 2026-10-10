@@ -1,0 +1,42 @@
+{
+  "manifest_version": 3,
+  "name": "Catbar",
+  "version": "0.3.0",
+  "description": "Changes the YouTube seek bar into a funny cat.",
+  "icons": {
+    "16": "icons/icon16.png",
+    "32": "icons/icon32.png",
+    "48": "icons/icon48.png",
+    "128": "icons/icon128.png"
+  },
+  "permissions": ["storage"],
+  "action": {
+    "default_popup": "popup/popup.html",
+    "default_icon": {
+      "16": "icons/icon16.png",
+      "32": "icons/icon32.png"
+    },
+    "default_title": "Catbar"
+  },
+  "content_scripts": [
+    {
+      "matches": ["https://www.youtube.com/*", "https://www.twitch.tv/*", "https://clips.twitch.tv/*"],
+      "js": [
+        "src/geometry.js",
+        "src/lines.js",
+        "src/adapters/youtube.js",
+        "src/adapters/twitch.js",
+        "src/catbar.js",
+        "src/content.js"
+      ],
+      "css": ["src/catbar.css"],
+      "run_at": "document_idle"
+    }
+  ],
+  "web_accessible_resources": [
+    {
+      "resources": ["assets/*.png", "assets/*/*.png"],
+      "matches": ["https://www.youtube.com/*", "https://www.twitch.tv/*", "https://clips.twitch.tv/*"]
+    }
+  ]
+}

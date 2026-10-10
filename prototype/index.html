@@ -1,0 +1,110 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Catbar プロトタイプ</title>
+  <link rel="stylesheet" href="../src/catbar.css">
+  <style>
+    :root { color-scheme: dark; }
+    body { margin: 0; padding: 24px 16px; background: #181818; color: #eee; font: 14px/1.6 system-ui, sans-serif; }
+    main { max-width: 960px; margin: 0 auto; }
+    h1 { font-size: 18px; margin: 0 0 12px; }
+    .toolbar { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; margin-bottom: 12px; }
+    .player { position: relative; background: #000; aspect-ratio: 16 / 9; }
+    .player video { width: 100%; height: 100%; display: block; }
+    .drop[hidden] { display: none; }
+    .drop { position: absolute; inset: 0; display: grid; place-items: center; color: #aaa; pointer-events: none; }
+    /* 標準バー代わりの細い線と、取り付け先 */
+    .bar-area { position: relative; margin: 56px 0 24px; height: 16px; }
+    .native-bar { position: absolute; left: 0; right: 0; top: 6px; height: 4px; background: rgba(255,255,255,.25); }
+    .controls { display: flex; gap: 12px; align-items: center; }
+    button { font: inherit; padding: 4px 12px; }
+  </style>
+</head>
+<body>
+<main>
+  <h1>Catbar プロトタイプ</h1>
+  <div class="toolbar">
+    <input type="file" id="file" accept="video/*">
+    <label>倍率
+      <select id="scale"><option>1</option><option selected>2</option><option>3</option></select>
+    </label>
+    <label>猫
+      <select id="breed"><option value="white">白猫</option><option value="black">黒猫</option><option value="hachiware">八割れ</option></select>
+    </label>
+    <button id="say" type="button">しゃべらせる</button>
+  </div>
+  <div class="player" id="player">
+    <video id="video" playsinline></video>
+    <div class="drop" id="drop">動画ファイルを選ぶか、ここにドロップ</div>
+  </div>
+  <div class="bar-area" id="barArea"><div class="native-bar"></div></div>
+  <div class="controls">
+    <button id="toggle">再生 / 一時停止</button>
+    <span id="time">0:00 / 0:00</span>
+  </div>
+</main>
+<script src="../src/geometry.js"></script>
+<script src="../src/lines.js"></script>
+<script src="../src/catbar.js"></script>
+<script>
+  const { CatBar, geometry: G } = CSB;
+  const video = document.getElementById('video');
+  const barArea = document.getElementById('barArea');
+
+  // ローカル再生用の最小アダプター
+  const adapter = {
+    name: 'local',
+    barCenterY: (c) => c.clientHeight / 2,
+    hideNativeBar: () => barArea.classList.add('csb-hide-native'),
+    showNativeBar: () => barArea.classList.remove('csb-hide-native'),
+    isLive: (v) => !Number.isFinite(v.duration),
+    isAdPlaying: () => false,
+  };
+
+  const bar = new CatBar({
+    adapter,
+    assetUrl: (path) => `../assets/${path}`,
+    scale: Number(document.getElementById('scale').value),
+  });
+  bar.mount(barArea, video);
+  window.catBar = bar;
+
+  function load(src) {
+    video.src = src;
+    document.getElementById('drop').hidden = true;
+  }
+  document.getElementById('file').addEventListener('change', (e) => {
+    const f = e.target.files[0];
+    if (f) load(URL.createObjectURL(f));
+  });
+  const player = document.getElementById('player');
+  player.addEventListener('dragover', (e) => e.preventDefault());
+  player.addEventListener('drop', (e) => {
+    e.preventDefault();
+    const f = e.dataTransfer.files[0];
+    if (f) load(URL.createObjectURL(f));
+  });
+  const qs = new URLSearchParams(location.search).get('src');
+  if (qs) load(qs);
+
+  document.getElementById('scale').addEventListener('change', (e) => bar.setScale(Number(e.target.value)));
+  document.getElementById('breed').addEventListener('change', (e) => bar.setBreed(e.target.value));
+  document.getElementById('say').addEventListener('click', () => bar.say());
+  const toggle = () => (video.paused ? video.play() : video.pause());
+  document.getElementById('toggle').addEventListener('click', toggle);
+  video.addEventListener('click', toggle);
+  // キーボード操作（スペースで再生/停止、矢印キーで5秒移動）
+  document.addEventListener('keydown', (e) => {
+    if (e.target.closest('input, select')) return;
+    if (e.code === 'Space') { e.preventDefault(); toggle(); }
+    if (e.code === 'ArrowRight') video.currentTime += 5;
+    if (e.code === 'ArrowLeft') video.currentTime -= 5;
+  });
+  video.addEventListener('timeupdate', () => {
+    document.getElementById('time').textContent = `${G.formatTime(video.currentTime)} / ${G.formatTime(video.duration)}`;
+  });
+</script>
+</body>
+</html>

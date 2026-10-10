@@ -1,0 +1,21 @@
+# 拡張のパッケージと秘密鍵（.pem は絶対に公開しない）
+*.crx
+*.pem
+*.zip
+
+# プロトタイプで使う手元の動画
+*.mp4
+*.webm
+*.mkv
+*.mov
+
+# Python / Node
+__pycache__/
+node_modules/
+
+# OS・エディタ
+.DS_Store
+Thumbs.db
+desktop.ini
+.vscode/
+.idea/

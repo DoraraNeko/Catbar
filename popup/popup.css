@@ -1,0 +1,238 @@
+:root {
+  --bg: #111217;
+  --surface: #1a1c23;
+  --surface-hover: #21242d;
+  --line: #2a2d38;
+  --text: #ecedf3;
+  --muted: #8b8ea0;
+  --accent: #f5b544;
+  --accent-soft: rgba(245, 181, 68, 0.14);
+  --radius: 12px;
+  color-scheme: dark;
+}
+
+@property --stretch {
+  syntax: "<length>";
+  inherits: true;
+  initial-value: 0px;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  width: 300px;
+  background: var(--bg);
+  color: var(--text);
+  font: 13px/1.5 system-ui, "Yu Gothic UI", "Hiragino Sans", Meiryo, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ===== ヘッダー（猫のプレビュー） ===== */
+.hero {
+  padding: 16px 18px 0;
+  background:
+    radial-gradient(120% 90% at 85% 0%, rgba(245, 181, 68, 0.12), transparent 60%),
+    linear-gradient(180deg, #1c2030, var(--bg));
+  border-bottom: 1px solid var(--line);
+}
+.hero-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+h1 {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+}
+
+.stage {
+  position: relative;
+  height: 84px;
+  margin-top: 6px;
+  overflow: hidden;
+}
+.floor {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 9px;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--line) 15%, var(--line) 85%, transparent);
+}
+
+/* 素材 40px を2倍で表示。胴体が伸び縮みする */
+.cat {
+  --img-lower: url("../assets/white/cat-lower.png");
+  --img-body: url("../assets/white/cat-body-tile.png");
+  --img-upper: url("../assets/white/cat-upper-normal.png");
+  position: absolute;
+  left: 8px;
+  bottom: 0;
+  width: 248px;
+  height: 80px;
+  animation: stretch 4.8s steps(20) infinite alternate;
+}
+.cat > div {
+  position: absolute;
+  top: 0;
+  height: 80px;
+  image-rendering: pixelated;
+  background-repeat: no-repeat;
+  background-size: 100% 100%;
+}
+.cat-lower { left: 0; width: 40px; background-image: var(--img-lower); }
+.cat-body {
+  left: 38px;
+  width: calc(4px + var(--stretch));
+  background-image: var(--img-body);
+  background-repeat: repeat-x !important;
+  background-size: 8px 80px !important;
+}
+.cat-upper {
+  left: 24px;
+  width: 80px;
+  transform: translateX(var(--stretch));
+  background-image: var(--img-upper);
+}
+@keyframes stretch {
+  from { --stretch: 16px; }
+  to { --stretch: 136px; }
+}
+
+/* 無効のときは寝ている */
+body.off .cat { animation-play-state: paused; filter: saturate(0.6) brightness(0.8); }
+
+/* ===== 設定 ===== */
+main {
+  padding: 6px 18px 4px;
+  transition: opacity 0.2s;
+}
+body.off main { opacity: 0.4; pointer-events: none; }
+
+section { padding: 12px 0; }
+section + section { border-top: 1px solid var(--line); }
+
+h2 {
+  margin: 0 0 10px;
+  color: var(--muted);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+}
+.row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+.row h2 { margin-bottom: 2px; }
+.row p { margin: 0; color: var(--text); font-size: 12px; }
+
+input[type="radio"] {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* 猫の種類 */
+.breeds {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+}
+.breed {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  padding: 8px 0 6px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--surface);
+  cursor: pointer;
+  transition: border-color 0.15s, background 0.15s, transform 0.15s;
+}
+.breed:hover { background: var(--surface-hover); }
+.breed:active { transform: scale(0.97); }
+.breed:has(input:checked) {
+  border-color: var(--accent);
+  background: var(--accent-soft);
+}
+.breed:has(input:focus-visible) { outline: 2px solid var(--accent); outline-offset: 2px; }
+.face {
+  width: 52px;
+  height: 52px;
+  border-radius: 10px;
+  background-color: #2b3142;
+  background-repeat: no-repeat;
+  background-size: 80px 80px;
+  background-position: -20px -8px;
+  image-rendering: pixelated;
+}
+.face[data-breed="white"] { background-image: url("../assets/white/cat-upper-normal.png"); }
+.face[data-breed="black"] { background-image: url("../assets/black/cat-upper-normal.png"); background-color: #3d4660; }
+.face[data-breed="hachiware"] { background-image: url("../assets/hachiware/cat-upper-normal.png"); background-color: #3d4660; }
+.breed-name { font-size: 12px; }
+.breed:has(input:checked) .breed-name { color: var(--accent); font-weight: 600; }
+
+/* 大きさ */
+.segmented {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  padding: 3px;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: var(--surface);
+}
+.segmented label { position: relative; cursor: pointer; }
+.segmented span {
+  display: block;
+  padding: 5px 0;
+  border-radius: 7px;
+  text-align: center;
+  font-weight: 600;
+  color: var(--muted);
+  transition: background 0.15s, color 0.15s;
+}
+.segmented label:hover span { color: var(--text); }
+.segmented input:checked + span { background: var(--accent); color: #1a1408; }
+.segmented input:focus-visible + span { outline: 2px solid var(--accent); outline-offset: 1px; }
+
+/* スイッチ */
+.switch { position: relative; display: inline-flex; flex: none; cursor: pointer; }
+.switch input { position: absolute; opacity: 0; width: 100%; height: 100%; margin: 0; cursor: pointer; }
+.track {
+  width: 38px;
+  height: 22px;
+  padding: 3px;
+  border-radius: 999px;
+  background: #383c4a;
+  transition: background 0.2s;
+}
+.thumb {
+  display: block;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: #fff;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.4);
+  transition: transform 0.2s;
+}
+.switch input:checked + .track { background: var(--accent); }
+.switch input:checked + .track .thumb { transform: translateX(16px); }
+.switch input:focus-visible + .track { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+footer {
+  padding: 4px 18px 12px;
+  color: #5d6072;
+  font-size: 11px;
+  text-align: right;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cat { animation: none; --stretch: 96px; }
+  * { transition: none !important; }
+}

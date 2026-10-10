@@ -1,0 +1,123 @@
+/* Catbar: 猫の見た目 */
+.csb-root {
+  position: absolute;
+  left: 0;
+  width: 100%;
+  z-index: 60;
+  pointer-events: none;
+  filter: drop-shadow(0 0 1px rgba(0, 0, 0, 0.75));
+}
+.csb-root[hidden] { display: none !important; }
+
+.csb-root > div,
+.csb-upper > div {
+  position: absolute;
+  image-rendering: pixelated;
+  background-repeat: no-repeat;
+  background-size: 100% 100%;
+}
+
+.csb-hit { pointer-events: auto; cursor: pointer; }
+.csb-upper { will-change: transform; }
+.csb-grab { pointer-events: auto; cursor: grab; }
+.csb-root[data-face="wide"] .csb-grab,
+.csb-root[data-face="wide"] .csb-hit { cursor: grabbing; }
+
+.csb-lower { background-image: var(--csb-img-lower); }
+.csb-body {
+  background-image: var(--csb-img-body);
+  background-repeat: repeat-x !important;
+  background-position: left top;
+}
+.csb-root[data-face="normal"] .csb-upper { background-image: var(--csb-img-normal); }
+.csb-root[data-face="wide"] .csb-upper { background-image: var(--csb-img-wide); }
+.csb-root[data-face="closed"] .csb-upper { background-image: var(--csb-img-closed); }
+
+.csb-buffer {
+  background: rgba(255, 255, 255, 0.35);
+}
+
+/* 一時停止中の Zzz */
+.csb-zzz {
+  background-image: var(--csb-img-zzz);
+  display: none;
+  animation: csb-float 1.6s steps(4) infinite;
+}
+.csb-root[data-face="closed"] .csb-zzz { display: block; }
+@keyframes csb-float {
+  0%, 100% { translate: 0 0; }
+  50% { translate: 0 calc(-2px * var(--csb-n, 1)); }
+}
+
+/* 黒い部分がある猫は、暗い動画でも見えるよう明るい縁取りにする */
+.csb-root[data-breed="black"],
+.csb-root[data-breed="hachiware"] {
+  filter: drop-shadow(0 0 1px rgba(255, 255, 255, 0.8));
+}
+
+/* 3分ごとのセリフの吹き出し（根元は頭の右上。右端に近いときは左上に回る） */
+.csb-root .csb-upper > .csb-bubble {
+  top: auto;
+  width: max-content;
+  max-width: 220px;
+  padding: 4px 8px;
+  border: 2px solid #14141c;
+  border-radius: 8px 8px 8px 0;
+  background: #fff;
+  color: #14141c;
+  font: 600 12px/1.45 "Hiragino Maru Gothic ProN", "BIZ UDPGothic", "Yu Gothic UI", Meiryo, sans-serif;
+  white-space: normal;
+  image-rendering: auto;
+  animation: csb-pop 0.18s steps(3);
+}
+.csb-root .csb-upper > .csb-bubble.csb-bubble-flip {
+  border-radius: 8px 8px 0 8px;
+}
+.csb-root .csb-upper > .csb-bubble[hidden] { display: none; }
+.csb-bubble::after {
+  content: "";
+  position: absolute;
+  left: -2px;
+  bottom: -8px;
+  border-style: solid;
+  border-width: 8px 8px 0 0;
+  border-color: #14141c transparent transparent transparent;
+}
+.csb-bubble.csb-bubble-flip::after {
+  left: auto;
+  right: -2px;
+  border-width: 8px 0 0 8px;
+  border-color: #14141c transparent transparent transparent;
+}
+@keyframes csb-pop {
+  from { opacity: 0; translate: 0 4px; }
+  to { opacity: 1; translate: 0 0; }
+}
+
+/* 時刻表示 */
+.csb-label {
+  left: 0;
+  top: -6px;
+  translate: 0 -100%;
+  padding: 2px 6px;
+  border-radius: 3px;
+  background: rgba(28, 28, 28, 0.9);
+  color: #fff;
+  font: 500 12px/1.4 Roboto, Arial, sans-serif;
+  white-space: nowrap;
+  image-rendering: auto;
+}
+.csb-label[hidden] { display: none; }
+
+/* ===== 標準バーを隠す（アダプターがクラスを付け外しする） ===== */
+
+/* 取り付け先の中の、猫以外の要素（標準バー）を透明にする。要素は残すのでレイアウトは崩れない */
+.csb-hide-native > :not(.csb-root) {
+  opacity: 0 !important;
+}
+
+/* YouTube: 標準バーのホバー時刻・サムネイルは位置の対応が猫とずれるため隠す */
+.html5-video-player.csb-player-active .ytp-tooltip.ytp-preview,
+.html5-video-player.csb-player-active .ytp-tooltip.ytp-bottom {
+  display: none !important;
+}
