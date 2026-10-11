@@ -15,6 +15,7 @@ The cat's back half sits at 0:00, its head follows the playback position, and it
 - Three cats: white, black, and tuxedo (hachiware).
 - Every 3 minutes of playback, the cat says something in a speech bubble (in Japanese; some of it is sarcastic).
 - Hover the bar to see the time at that position. A faint line under the body shows how much of the video has loaded.
+- Works on regular videos and YouTube Shorts.
 - Live streams and ads keep the normal seek bar.
 - Also works on Twitch VODs and clips (experimental).
 
@@ -26,7 +27,7 @@ Catbar is not on the Chrome Web Store. Load it as an unpacked extension:
 2. Open `chrome://extensions` (Edge: `edge://extensions`).
 3. Turn on **Developer mode**.
 4. Click **Load unpacked** and choose the folder that contains `manifest.json`.
-5. Open a YouTube video. Reload any YouTube tabs that were already open.
+5. Open a YouTube video or Short. Reload any YouTube tabs that were already open.
 
 Click the toolbar icon to open the settings: turn the cat on/off, pick a cat, change its size (1x–3x), and turn the speech bubbles on/off.
 
@@ -80,6 +81,7 @@ YouTube のシークバーを、再生とともに体が伸びる猫に置き換
 - 表情: 再生中は通常、一時停止中は目を閉じて Zzz、ドラッグ中は丸目
 - 猫の種類: 白猫・黒猫・八割れ
 - 再生3分ごとに、猫が吹き出しでしゃべります（直近5つと同じセリフは出ません）
+- 通常の動画と YouTube ショートで使えます
 - ライブ配信と広告の再生中は、元のシークバーのままです
 - Twitch の VOD とクリップにも対応しています（試験的）
 
@@ -89,7 +91,7 @@ YouTube のシークバーを、再生とともに体が伸びる猫に置き換
 2. `chrome://extensions`（Edge は `edge://extensions`）を開く
 3. 「デベロッパー モード」をオンにする
 4. 「パッケージ化されていない拡張機能を読み込む」で、`manifest.json` のあるフォルダを選ぶ
-5. YouTube の動画を開く（開いていたタブは再読み込みする）
+5. YouTube の動画かショートを開く（開いていたタブは再読み込みする）
 
 ツールバーのアイコンから設定画面を開き、ON/OFF・猫の種類・大きさ・おしゃべりの ON/OFF を切り替えられます。
 
