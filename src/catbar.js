@@ -130,6 +130,7 @@
       root.hidden = true;
       const el = {
         root,
+        track: mk('csb-track', root),
         buffer: mk('csb-buffer', root),
         body: mk('csb-body', root),
         lower: mk('csb-lower', root),
@@ -277,7 +278,13 @@
       s(this.el.hit, 0, hitTop, L.barWidth, L.bandBottom - hitTop);
       // Zzz は頭の左上（耳の左側）に出す
       s(this.el.zzz, -2 * L.n, -6 * L.n, S.zzzW * L.n, S.zzzH * L.n);
-      s(this.el.buffer, 0, L.bandBottom - 3 * L.n, 0, 2 * L.n);
+      // バーの全体（未読み込みを含む）と読み込み済みの範囲を、胴体の中心の高さに線で描く。
+      // 線の右端は、再生位置が最後のときの頭の中心（クリックで飛べる範囲の端）
+      const lineTop = Math.round(L.bandCenterY - 2 * L.n);
+      const lineLeft = L.lowerW - L.overlap;
+      L.lineEnd = G.positionAt(1, L).upperX + L.grabCenter;
+      s(this.el.track, lineLeft, lineTop, Math.max(0, L.lineEnd - lineLeft), 4 * L.n);
+      s(this.el.buffer, lineLeft, lineTop, 0, 4 * L.n);
       // 吹き出しの根元: 右耳の右上（通常）／左耳の左上（右端に近いとき）
       L.bubbleRightX = (S.upperW - 10) * L.n;
       L.bubbleLeftX = 14 * L.n;
@@ -323,9 +330,8 @@
       // 読み込み済みの範囲は、胴体の下に薄い線で示す
       const bufP = this.bufferedEnd();
       const bufPos = G.positionAt(bufP, L);
-      const bufW = bufP > 0 ? Math.max(0, bufPos.upperX + L.join - pos.bodyX) : 0;
+      const bufW = bufP > 0 ? Math.max(0, bufPos.upperX + L.grabCenter - pos.bodyX) : 0;
       if (force || bufW !== this.last.bufW) {
-        this.el.buffer.style.left = `${pos.bodyX}px`;
         this.el.buffer.style.width = `${bufW}px`;
         this.last.bufW = bufW;
       }

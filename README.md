@@ -14,7 +14,7 @@ The cat's back half sits at 0:00, its head follows the playback position, and it
 - Faces: normal while playing, eyes closed with "Zzz" when paused, round eyes while you drag.
 - Three cats: white, black, and tuxedo (hachiware).
 - Every 3 minutes of playback, the cat says something in a speech bubble (in Japanese; some of it is sarcastic).
-- Hover the bar to see the time at that position. A faint line under the body shows how much of the video has loaded.
+- A faint line shows the whole bar, so you can see where to click. The brighter part shows how much has loaded. Hover it to see the time at that position.
 - Works on regular videos and YouTube Shorts.
 - Live streams and ads keep the normal seek bar.
 - Also works on Twitch VODs and clips (experimental).
@@ -77,7 +77,7 @@ YouTube is a trademark of Google LLC, and Twitch is a trademark of Twitch Intera
 YouTube のシークバーを、再生とともに体が伸びる猫に置き換える Chrome 拡張です。
 
 - 下半身はバーの始端（0:00）、上半身は現在の再生位置。間の胴体が伸びていきます
-- バーのクリックや、猫の頭のドラッグでシークできます
+- バーのクリックや、猫の頭のドラッグでシークできます。バーの全体は薄い線で表示され、読み込み済みの部分は少し明るくなります
 - 表情: 再生中は通常、一時停止中は目を閉じて Zzz、ドラッグ中は丸目
 - 猫の種類: 白猫・黒猫・八割れ
 - 再生3分ごとに、猫が吹き出しでしゃべります（直近5つと同じセリフは出ません）

@@ -33,9 +33,18 @@
 .csb-root[data-face="wide"] .csb-upper { background-image: var(--csb-img-wide); }
 .csb-root[data-face="closed"] .csb-upper { background-image: var(--csb-img-closed); }
 
-.csb-buffer {
-  background: rgba(255, 255, 255, 0.35);
+/* バーの全体（未読み込みを含む）と、読み込み済みの範囲 */
+.csb-root > .csb-track,
+.csb-root > .csb-buffer {
+  border-radius: 999px;
+  image-rendering: auto;
 }
+/* 明るい動画の上でも見えるよう、線には薄い暗い縁を付ける */
+.csb-track {
+  background: rgba(255, 255, 255, 0.28);
+  box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.45);
+}
+.csb-buffer { background: rgba(255, 255, 255, 0.5); }
 
 /* 一時停止中の Zzz */
 .csb-zzz {
